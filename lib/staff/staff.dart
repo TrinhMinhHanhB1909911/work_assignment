@@ -1,20 +1,22 @@
 class Staff {
-  int id;
+  int? id;
   String name;
   String address;
   int? birthYear;
   String? gender;
   String gmail;
   String position;
+  String? password;
 
   Staff({
-    required this.id,
+     this.id,
     required this.name,
     required this.address,
     this.birthYear,
     this.gender,
     required this.gmail,
     required this.position,
+     this.password,
   });
 
   Staff copyWith({
@@ -25,6 +27,7 @@ class Staff {
     String? gender,
     String? gmail,
     String? position,
+    String? password,
   }) {
     return Staff(
       id: id ?? this.id,
@@ -34,6 +37,7 @@ class Staff {
       gender: gender ?? this.gender,
       gmail: gmail ?? this.gmail,
       position: position ?? this.position,
+      password: password ?? this.password,
     );
   }
 
@@ -46,6 +50,7 @@ class Staff {
       gender: json['gender'],
       gmail: json['gmail'],
       position: json['position'],
+      password: json['password'],
     );
   }
 
@@ -58,6 +63,7 @@ class Staff {
       'gender': gender,
       'gmail': gmail,
       'position': position,
+      'password': password ?? '123456',
     };
   }
 }

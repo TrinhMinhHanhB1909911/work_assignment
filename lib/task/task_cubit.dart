@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:work_assignment/models/task_detail_full.dart';
+import 'package:work_assignment/staff/staff_cubit.dart';
 
-import '../models/task.dart';
+import 'task.dart';
 import 'task_service.dart';
 
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
-  TaskCubit(this.service) : super(TaskInitial());
+  TaskCubit(this.service, this.staffCubit) : super(TaskInitial());
+  StaffCubit staffCubit;
   TaskService service;
   List<Task>? tasks;
 
@@ -22,17 +23,6 @@ class TaskCubit extends Cubit<TaskState> {
     emit(TaskLoaded(tasks!));
   }
 
-  // Future<void> allTaskDetails() async {
-  //   if (taskDetails != null) {
-  //     emit(TaskDetailsLoaded(taskDetails!));
-  //     return;
-  //   }
-  //   emit(TaskLoading());
-  //   taskDetails = await taskDetailService.getAllTaskDetails();
-  //   print(taskDetails?.first.task.toJson());
-  //   emit(TaskDetailsLoaded(taskDetails!));
-  // }
-
   void taskDetail(Task task) {
     final taskDetail = tasks?.firstWhere((taskTile) => taskTile == task);
     emit(TaskDetail(taskDetail!));
@@ -40,23 +30,35 @@ class TaskCubit extends Cubit<TaskState> {
 
   void taskAddition() {
     emit(TaskAddition());
+    emit(TaskLoaded(tasks!));
   }
 
   void addTask(Task task) async {
     await service.addTask(task);
+    tasks?.add(task);
+    emit(TaskLoaded(tasks!));
   }
 
-  void updateTask(Task task) async {
+  Future<void> updateTask(Task task) async {
     await service.updateTask(task);
+    tasks?.removeWhere((element) => element.id == task.id);
+    tasks?.add(task);
+    emit(TaskLoaded(tasks!));
   }
 
   Future<void> refresh() async {
-    tasks = null;
+    dispose();
     await allTask();
   }
 
   void removeTask(Task task) async {
     await service.removeTask(task);
     tasks?.remove(task);
+    emit(TaskLoaded(tasks!));
+  }
+
+  void dispose() {
+    tasks = null;
+    emit(TaskInitial());
   }
 }

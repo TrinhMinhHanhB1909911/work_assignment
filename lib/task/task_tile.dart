@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/task.dart';
+import 'task.dart';
 import 'task_cubit.dart';
-import 'task_detail_screen.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({Key? key, required this.task}) : super(key: key);
@@ -31,15 +30,15 @@ class TaskTile extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: const Text('No'),
-                ),
-                TextButton(
-                  onPressed: () {
                     Navigator.of(context).pop(true);
                   },
                   child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('No'),
                 ),
               ],
             );

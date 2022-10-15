@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:work_assignment/shared/log_out_button.dart';
 import 'package:work_assignment/task/task_detail_screen.dart';
 
 import 'add_task_screen.dart';
@@ -16,14 +17,28 @@ class ListTaskPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: const Text('Lịch công tác'),
+        actions: const [
+          // InkWell(
+          //   onTap: () => context.read<SignCubit>().logOut(),
+          //   child: const Tooltip(
+          //     message: 'Đăng xuất',
+          //     child: Padding(
+          //       padding: EdgeInsets.symmetric(horizontal: 16),
+          //       child: Icon(
+          //         Icons.logout_rounded,
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //   ),
+          // )
+          LogOutButton(),
+        ],
       ),
       body: BlocConsumer<TaskCubit, TaskState>(
         listener: (context, state) {},
         builder: (context, state) {
           if (state is TaskLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
           if (state is TaskInitial) {
             context.read<TaskCubit>().allTask();
@@ -52,7 +67,10 @@ class ListTaskPage extends StatelessWidget {
           if (state is TaskDetail) {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => TaskDetailScreen(task: state.task),
+                builder: (_) => TaskDetailScreen(
+                  task: state.task,
+                  editable: true,
+                ),
               ),
             );
             context.read<TaskCubit>().allTask();
@@ -63,7 +81,7 @@ class ListTaskPage extends StatelessWidget {
                 builder: (_) => const AddTaskPage(),
               ),
             );
-            context.read<TaskCubit>().allTask();
+            // context.read<TaskCubit>().allTask();
           }
         },
         child: FloatingActionButton(

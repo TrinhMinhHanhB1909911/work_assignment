@@ -1,5 +1,5 @@
 
-import '../models/task.dart';
+import 'task.dart';
 import 'task_repository.dart';
 
 class TaskService {

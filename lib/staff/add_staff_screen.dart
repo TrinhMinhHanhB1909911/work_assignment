@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:work_assignment/models/staff.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import './staff.dart';
+import 'package:work_assignment/staff/staff_cubit.dart';
 
 class AddStaffScreen extends StatefulWidget {
   const AddStaffScreen({Key? key}) : super(key: key);
@@ -32,6 +33,7 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final staffCubit = BlocProvider.of<StaffCubit>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thêm nhân viên'),
@@ -123,18 +125,16 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                       onPressed: () async {
                         bool isValid = _key.currentState?.validate() ?? false;
                         if (isValid) {
-                          await FirebaseFirestore.instance
-                              .collection('staff')
-                              .add(
-                                Staff(
-                                  id: 10,
-                                  name: name,
-                                  gmail: gmail,
-                                  position: position,
-                                  address: address,
-                                ).toJson(),
-                              );
-                          showDialog(
+                          staffCubit.addStaff(
+                            Staff(
+                              name: name,
+                              address: address,
+                              gmail: gmail,
+                              position: position,
+                              password: password,
+                            ),
+                          );
+                          await showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
@@ -144,6 +144,9 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
+                                      BlocProvider.of<StaffCubit>(context)
+                                          .allStaffs();
+                                      Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },
                                     child: const Text('Ok'),

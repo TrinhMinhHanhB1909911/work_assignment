@@ -1,5 +1,5 @@
-import 'package:work_assignment/models/staff.dart';
 
+import 'staff.dart';
 import 'staff_repository.dart';
 
 
@@ -13,6 +13,11 @@ class StaffService {
   Future<Staff> getOneStaff(String name) async {
     final staffs = await staffRepo.list();
     return staffs.firstWhere((staff) => staff.name == name);
+  }
+
+  Future<Staff> getOneStaffByEmail(String email) async {
+    final staffs = await staffRepo.list();
+    return staffs.firstWhere((staff) => staff.gmail == email);
   }
 
   Future<Staff> addStaff(Staff item) async {

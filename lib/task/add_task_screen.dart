@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:work_assignment/models/staff.dart';
 import 'package:work_assignment/task/task_cubit.dart';
 
-import '../../models/task.dart';
+import '../staff/staff.dart';
 import '../staff/staff_service.dart';
+import 'task.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -225,8 +225,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           end: end!,
                           staffs: selected,
                         );
-                        print(task.toJson());
-                        await FirebaseFirestore.instance
+
+                        FirebaseFirestore.instance
                             .collection('tasks')
                             .add(task.toJson());
                         showDialog(
@@ -236,7 +236,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               title: const Text('Add new task'),
                               content: const Text(
                                 'Success!',
-                                style: TextStyle(color: Colors.green),
                               ),
                               actions: [
                                 InkWell(
@@ -253,7 +252,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     padding: EdgeInsets.all(8),
                                     child: Text(
                                       'ok',
-                                      style: TextStyle(color: Colors.pink),
                                     ),
                                   ),
                                 ),

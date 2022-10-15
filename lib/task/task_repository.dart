@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-import '../models/task.dart';
 import '../shared/repository_interface.dart';
+import 'task.dart';
 
 class TaskRepository implements Repository<Task> {
   final collection = FirebaseFirestore.instance.collection('tasks');

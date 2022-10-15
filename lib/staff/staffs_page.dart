@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:work_assignment/shared/log_out_button.dart';
 
 import 'add_staff_screen.dart';
 import 'staff_cubit.dart';
 import 'staff_detail_screen.dart';
+import 'staff_tile.dart';
 
 class StaffsPage extends StatelessWidget {
   const StaffsPage({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class StaffsPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         title: const Text('Nhân viên'),
+        actions: const [LogOutButton()],
       ),
       body: BlocConsumer<StaffCubit, StaffState>(
         listener: (context, state) {
@@ -34,14 +37,7 @@ class StaffsPage extends StatelessWidget {
                 itemCount: state.staffs.length,
                 itemBuilder: (context, index) {
                   final staff = state.staffs[index];
-                  return Card(
-                    child: ListTile(
-                      onTap: () =>
-                          context.read<StaffCubit>().staffDetail(staff),
-                      title: Text(staff.name),
-                      subtitle: Text(staff.gmail),
-                    ),
-                  );
+                  return StaffTile(staff);
                 },
               ),
             );
@@ -62,7 +58,7 @@ class StaffsPage extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (_) => const AddStaffScreen()),
           );
-          context.read<StaffCubit>().allStaffs();
+          //context.read<StaffCubit>().allStaffs();
         },
         child: const Icon(Icons.add),
       ),

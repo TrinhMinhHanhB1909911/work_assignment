@@ -3,14 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:multiselect/multiselect.dart';
 
-import '../../models/task.dart';
-import '../models/staff.dart';
+import '../staff/staff.dart';
 import '../staff/staff_service.dart';
+import 'task.dart';
 import 'task_cubit.dart';
 
 class TaskDetailScreen extends StatefulWidget {
-  const TaskDetailScreen({Key? key, required this.task}) : super(key: key);
+  const TaskDetailScreen({
+    Key? key,
+    required this.task,
+    required this.editable,
+  }) : super(key: key);
   final Task task;
+  final bool editable;
 
   @override
   State<TaskDetailScreen> createState() => _TaskDetailScreenState();
@@ -80,55 +85,77 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final taskCubit = BlocProvider.of<TaskCubit>(context);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text(widget.task.title),
         actions: [
-          TextButton(
-            onPressed: () async {
-              if (editing) {
-                bool confirm = await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Xác nhận'),
-                      content: const Text('Bạn có chắc muốn lưu thay đổi'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(true);
-                          },
-                          child: const Text('Yes'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
-                          child: const Text('No'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-                if (confirm) {
-                  Task newTask = widget.task.copyWith(
-                    title: titleController.text,
-                    description: descriptionController.text,
-                    state: stateController.text,
-                    begin: begin,
-                    end: end,
-                    staffs: selected,
+          Visibility(
+            visible: widget.editable,
+            child: TextButton(
+              onPressed: () async {
+                if (editing) {
+                  bool confirm = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Xác nhận'),
+                        content: const Text('Bạn có chắc muốn lưu thay đổi'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            child: const Text('Yes'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: const Text('No'),
+                          ),
+                        ],
+                      );
+                    },
                   );
-                  BlocProvider.of<TaskCubit>(context).updateTask(newTask);
+                  if (confirm) {
+                    Task newTask = widget.task.copyWith(
+                      title: titleController.text,
+                      description: descriptionController.text,
+                      state: stateController.text,
+                      begin: begin,
+                      end: end,
+                      staffs: selected,
+                    );
+                    origin['title'] = titleController.text;
+                    origin['description'] = descriptionController.text;
+                    origin['state'] = stateController.text;
+                    origin['begin'] = beginController.text;
+                    origin['end'] = endController.text;
+                    origin['staffsName'] = staffController.text;
+                    taskCubit.updateTask(newTask);
+                  } else {
+                    titleController.text = origin['title'] as String;
+                    descriptionController.text = origin['description'] as String;
+                    stateController.text = origin['state'] as String;
+                    beginController.text = origin['begin'] as String;
+                    endController.text = origin['end'] as String;
+                    staffController.text = origin['staffsName'] as String;
+                    selected = options
+                        .where((staff) =>
+                            (origin['staffsName'] as String).contains(staff.name))
+                        .toList();
+                  }
                 }
-              }
-              setState(() {
-                editing = !editing;
-              });
-            },
-            child: Text(
-              editing ? 'Xong' : 'Sửa',
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+                setState(() {
+                  editing = !editing;
+                });
+              },
+              child: Text(
+                editing ? 'Xong' : 'Sửa',
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
             ),
           ),
         ],
@@ -252,9 +279,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               ),
             )
           : Text(
-              label == 'bắt đầu:'
-                  ? origin['begin']!
-                  : origin['end']!,
+              label == 'bắt đầu:' ? origin['begin']! : origin['end']!,
               style: const TextStyle(fontSize: 18),
             );
     }
@@ -280,17 +305,15 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   selected = options
                       .where((staff) => values.contains(staff.name))
                       .toList();
-                  // controller.clear();
-                  // var selectedStaffs = options
-                  //     .where((staff) => values.contains(staff.name))
-                  //     .toList();
-                  // for (int i = 0; i < selectedStaffs.length; i++) {
-                  //   if (i == selectedStaffs.length - 1) {
-                  //     controller.text += selectedStaffs[i].name;
-                  //   } else {
-                  //     controller.text += '${selectedStaffs[i].name}, ';
-                  //   }
-                  // }
+
+                  staffController.text = '';
+                  for (int i = 0; i < selected.length; i++) {
+                    if (i == selected.length - 1) {
+                      controller.text += selected[i].name;
+                    } else {
+                      controller.text += '${selected[i].name}, ';
+                    }
+                  }
                 },
               ),
             )

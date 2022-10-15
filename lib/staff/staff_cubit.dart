@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:work_assignment/models/staff.dart';
+import './staff.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,5 +28,22 @@ class StaffCubit extends Cubit<StaffState> {
   Future<void> refresh() async {
     staffs = null;
     allStaffs();
+  }
+
+  Future<void> remove(Staff staff) async {
+    await service.removeStaff(staff);
+    staffs?.remove(staff);
+    // emit(StaffsLoaded(staffs!));
+  }
+
+  Future<void> addStaff(Staff staff) async {
+    await service.addStaff(staff);
+    staffs?.add(staff);
+    emit(StaffsLoaded(staffs!));
+  }
+
+  void dispose() {
+    staffs = null;
+    emit(StaffInitial());
   }
 }

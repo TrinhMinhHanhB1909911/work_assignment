@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-import '../models/staff.dart';
 import '../shared/repository_interface.dart';
+import 'staff.dart';
 
 class StaffRepository implements Repository<Staff> {
   final collection = FirebaseFirestore.instance.collection('staff');
 
   @override
   Future<Staff> create(Staff item) async {
+    final snapshot = await collection.orderBy('id').limitToLast(1).get();
+    item.id = (snapshot.docs.first.data()['id'] as int) + 1;
     await collection.add(item.toJson());
     return item;
   }

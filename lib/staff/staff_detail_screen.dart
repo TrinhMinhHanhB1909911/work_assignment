@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/staff.dart';
+import 'staff.dart';
 
 class StaffDetailScreen extends StatelessWidget {
   const StaffDetailScreen(this.staff, {Key? key}) : super(key: key);
@@ -20,6 +20,10 @@ class StaffDetailScreen extends StatelessWidget {
             StaffField('Gmail: ', staff.gmail),
             StaffField('Vị trí: ', staff.position),
             StaffField('Địa chỉ: ', staff.address),
+            const Expanded(
+              flex: 3,
+              child: SizedBox(),
+            ),
           ],
         ),
       ),
@@ -34,16 +38,18 @@ class StaffField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textStyle = const TextStyle(fontSize: 18);
-    return Row(
-      children: [
-        Expanded(
-          child: Text(label, style: textStyle),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(value, style: textStyle),
-        ),
-      ],
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(label, style: textStyle),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(value, style: textStyle),
+          ),
+        ],
+      ),
     );
   }
 }
