@@ -34,9 +34,19 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   void addTask(Task task) async {
+    task = handleTaskBeforeAdd(task);
     await service.addTask(task);
     tasks?.add(task);
     emit(TaskLoaded(tasks!));
+  }
+
+  Task handleTaskBeforeAdd(Task task) {
+    return task.copyWith(
+      title: task.title[0].toUpperCase() + task.title.substring(1),
+      description:
+          task.description[0].toUpperCase() + task.description.substring(1),
+      state: task.state[0].toUpperCase() + task.state.substring(1),
+    );
   }
 
   Future<void> updateTask(Task task) async {

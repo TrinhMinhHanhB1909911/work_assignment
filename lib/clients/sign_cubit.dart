@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_assignment/clients/home_cubit.dart';
+import 'package:work_assignment/clients/home_state.dart';
 import 'package:work_assignment/staff/staff_cubit.dart';
 import 'package:work_assignment/staff/staff_service.dart';
 import 'package:work_assignment/task/task_cubit.dart';
@@ -22,24 +23,24 @@ class SignCubit extends Cubit<SignState> {
   void signIn(String email, String password) async {
     final spref = await SharedPreferences.getInstance();
     if (email == 'admin@gmail.com' && password == 'admin') {
+      await spref.setString('gmail', email);
       emit(AdminSignIned());
-      spref.setString('gmail', email);
       return;
     }
     Staff staff = await service.getOneStaffByEmail(email);
     if (staff.gmail == email && staff.password == password) {
-      // final spref = await SharedPreferences.getInstance();
       await spref.setString('gmail', staff.gmail);
       emit(SignIned());
+      homeCubit.emit(HomeInitial());
     }
   }
 
-  void logOut() async {
-    final spref = await SharedPreferences.getInstance();
-    await spref.remove('gmail');
+  Future<void> logOut() async {
     taskCubit.dispose();
     staffCubit.dispose();
     homeCubit.dispose();
+    final spref = await SharedPreferences.getInstance();
+    await spref.remove('gmail');
     emit(LogOut());
   }
 }

@@ -28,7 +28,7 @@ class WorkAsignmentApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final TaskService taskService = TaskService();
     final StaffService staffService = StaffService();
-    final StaffCubit staffCubit = StaffCubit(staffService);
+    final StaffCubit staffCubit = StaffCubit(staffService, taskService);
     final HomeCubit homeCubit = HomeCubit(taskService, staffService);
     final TaskCubit taskCubit = TaskCubit(taskService, staffCubit);
     final SignCubit signCubit = SignCubit(

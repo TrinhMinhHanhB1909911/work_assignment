@@ -13,7 +13,7 @@ class _LogOutButtonState extends State<LogOutButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => BlocProvider.of<SignCubit>(context).logOut(),
+      onTap: () async => await BlocProvider.of<SignCubit>(context).logOut(),
       child: const Tooltip(
         message: 'Đăng xuất',
         child: Padding(

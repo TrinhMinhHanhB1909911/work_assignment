@@ -54,6 +54,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    TaskCubit taskCubit = BlocProvider.of(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -225,10 +226,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           end: end!,
                           staffs: selected,
                         );
-
-                        FirebaseFirestore.instance
-                            .collection('tasks')
-                            .add(task.toJson());
+                        taskCubit.addTask(task);
                         showDialog(
                           context: context,
                           builder: (context) {

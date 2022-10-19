@@ -36,7 +36,7 @@ class StaffRepository implements Repository<Staff> {
 
   @override
   Future<List<Staff>> list() async {
-    final docs = await collection.get();
+    final docs = await collection.orderBy('name').get();
     return docs.docs.map((doc) => Staff.fromJson(doc.data())).toList();
   }
 

@@ -15,8 +15,23 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   bool showPassword = false;
 
-  String email = '';
-  String password = '';
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,116 +43,118 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            const SizedBox(height: 160),
-            const Text(
-              'Đăng nhập',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
-              ),
-            ),
-            const SizedBox(height: 30.0),
-            Container(
-              padding: const EdgeInsets.only(left: 24),
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 2,
-                    offset: Offset(4, 4),
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(32.0)),
-              ),
-              child: TextField(
-                onChanged: (text) {
-                  email = text;
-                },
-                decoration: const InputDecoration(
-                  hintText: 'Email',
-                  border: InputBorder.none,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 160),
+              const Text(
+                'Đăng nhập',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.only(left: 24),
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 2,
-                    offset: Offset(4, 4),
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(32.0)),
-              ),
-              child: TextField(
-                onChanged: (text) {
-                  password = text;
-                },
-                obscureText: !showPassword,
-                decoration: InputDecoration(
-                  hintText: 'Mật khẩu',
-                  border: InputBorder.none,
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    child: Icon(
-                      showPassword ? Icons.visibility : Icons.visibility_off,
+              const SizedBox(height: 30.0),
+              Container(
+                padding: const EdgeInsets.only(left: 24),
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 2,
+                      offset: Offset(4, 4),
                     ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                child: TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
+                    border: InputBorder.none,
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-            BlocListener<SignCubit, SignState>(
-              listener: (context, state) {
-                if (state is SignIned) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const HomeScreen()),
-                  );
-                }
-                if (state is AdminSignIned) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          const AdminPage(title: 'Quản trị lịch công tác'),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.only(left: 24),
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 2,
+                      offset: Offset(4, 4),
                     ),
-                  );
-                }
-              },
-              child: Material(
-                elevation: 4,
-                borderRadius: BorderRadius.circular(32.0),
-                color: Colors.blue,
-                child: InkWell(
-                  onTap: () {
-                    context.read<SignCubit>().signIn(email, password);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12.0),
-                    width: double.infinity,
-                    child: const Text(
-                      'Đăng nhập',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                child: TextField(
+                  controller: passwordController,
+                  obscureText: !showPassword,
+                  decoration: InputDecoration(
+                    hintText: 'Mật khẩu',
+                    border: InputBorder.none,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                      child: Icon(
+                        showPassword ? Icons.visibility : Icons.visibility_off,
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 30),
+              BlocListener<SignCubit, SignState>(
+                listener: (context, state) {
+                  if (state is SignIned) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    );
+                    // context.read<HomeCubit>().getAllTasks();
+                  }
+                  if (state is AdminSignIned) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            const AdminPage(title: 'Quản trị lịch công tác'),
+                      ),
+                    );
+                  }
+                },
+                child: Material(
+                  elevation: 4,
+                  borderRadius: BorderRadius.circular(32.0),
+                  color: Colors.blue,
+                  child: InkWell(
+                    onTap: () {
+                      context.read<SignCubit>().signIn(
+                            emailController.text,
+                            passwordController.text,
+                          );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12.0),
+                      width: double.infinity,
+                      child: const Text(
+                        'Đăng nhập',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

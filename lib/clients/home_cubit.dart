@@ -35,15 +35,19 @@ class HomeCubit extends Cubit<HomeState> {
     final spref = await SharedPreferences.getInstance();
     final gmail = spref.getString('gmail');
     final tasksData = await taskService.getAllTasks();
-    tasks = <Task>[];
-    for (var task in tasksData) {
-      for (var staff in task.staffs) {
-        if (staff.gmail == gmail) {
-          tasks!.add(task);
+
+    if (gmail != null) {
+      tasks = <Task>[];
+      for (var task in tasksData) {
+        for (var staff in task.staffs) {
+          if (staff.gmail == gmail) {
+            tasks!.add(task);
+            // break;
+          }
         }
       }
+      emit(HomeLoaded(tasks!));
     }
-    emit(HomeLoaded(tasks!));
   }
 
   void taskDetail(Task task) {
@@ -71,6 +75,29 @@ class HomeCubit extends Cubit<HomeState> {
   void dispose() {
     tasks = null;
     staff = null;
+    navIndex = 0;
     emit(HomeInitial());
+  }
+
+  void getStaffInfo(String email) async {
+    staff ??= await staffService.getOneStaffByEmail(email);
+  }
+
+  Future<void> changeAccountInfo(Staff staff) async {
+    staffService.updateStaff(staff);
+    final tasks = await taskService.getAllTasks();
+    final tasksNeedUpdate = tasks.where((task) {
+      for (var element in task.staffs) {
+        if (element.id == staff.id) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
+    for (var task in tasksNeedUpdate) {
+      task.staffs.removeWhere((element) => element.id == staff.id);
+      task.staffs.add(staff);
+      await taskService.updateTask(task);
+    }
   }
 }

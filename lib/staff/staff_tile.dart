@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:work_assignment/staff/staff_cubit.dart';
 
+import '../task/task_cubit.dart';
 import 'staff.dart';
 
 class StaffTile extends StatelessWidget {
@@ -10,6 +11,7 @@ class StaffTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final staffCubit = BlocProvider.of<StaffCubit>(context);
+    final taskCubit = BlocProvider.of<TaskCubit>(context);
     return Dismissible(
       key: ValueKey(staff.name),
       confirmDismiss: (_) async {
@@ -38,7 +40,8 @@ class StaffTile extends StatelessWidget {
         );
       },
       onDismissed: (direction) async {
-        await staffCubit.remove(staff);
+        await staffCubit.remove(context, staff);
+        taskCubit.refresh();
       },
       background: Container(
         color: Colors.red,

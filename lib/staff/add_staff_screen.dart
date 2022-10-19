@@ -36,6 +36,7 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
     final staffCubit = BlocProvider.of<StaffCubit>(context);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: const Text('Thêm nhân viên'),
       ),
       body: Center(

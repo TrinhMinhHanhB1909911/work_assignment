@@ -41,7 +41,22 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           elevation: 0,
-          actions: const [LogOutButton()],
+          actions: const [
+            LogOutButton()
+            // InkWell(
+            //   onTap: () => BlocProvider.of<SignCubit>(context).logOut(),
+            //   child: const Tooltip(
+            //     message: 'Đăng xuất',
+            //     child: Padding(
+            //       padding: EdgeInsets.symmetric(horizontal: 16),
+            //       child: Icon(
+            //         Icons.logout_rounded,
+            //         color: Colors.white,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
         ),
         body: BlocConsumer<HomeCubit, HomeState>(
           listener: (context, state) {
@@ -62,6 +77,21 @@ class HomeScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is HomeLoaded) {
+              if (state.tasks.isEmpty) {
+                return RefreshIndicator(
+                  onRefresh: () => context.read<HomeCubit>().refresh(),
+                  child: ListView(
+                    children: const [
+                      SizedBox(height: 300),
+                      Text(
+                        'Bạn chưa có lịch công tác',
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
               return RefreshIndicator(
                 onRefresh: () => context.read<HomeCubit>().refresh(),
                 child: ListView.builder(

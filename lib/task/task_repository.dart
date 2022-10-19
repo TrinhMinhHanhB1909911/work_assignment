@@ -33,7 +33,7 @@ class TaskRepository implements Repository<Task> {
 
   @override
   Future<List<Task>> list() async {
-    final docs = await collection.orderBy('id').get();
+    final docs = await collection.orderBy('state').get();
     return docs.docs.map((doc) => Task.fromJson(doc.data())).toList();
   }
 

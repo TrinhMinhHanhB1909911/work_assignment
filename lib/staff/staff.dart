@@ -9,14 +9,14 @@ class Staff {
   String? password;
 
   Staff({
-     this.id,
+    this.id,
     required this.name,
     required this.address,
     this.birthYear,
     this.gender,
     required this.gmail,
     required this.position,
-     this.password,
+    this.password,
   });
 
   Staff copyWith({
@@ -59,11 +59,38 @@ class Staff {
       'id': id,
       'name': name,
       'address': address,
-      'birthYear': birthYear,
-      'gender': gender,
+      'birthYear': birthYear ?? 1950,
+      'gender': gender ?? 'Nam',
       'gmail': gmail,
       'position': position,
       'password': password ?? '123456',
     };
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is Staff &&
+      other.id == id &&
+      other.name == name &&
+      other.address == address &&
+      other.birthYear == birthYear &&
+      other.gender == gender &&
+      other.gmail == gmail &&
+      other.position == position &&
+      other.password == password;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      name.hashCode ^
+      address.hashCode ^
+      birthYear.hashCode ^
+      gender.hashCode ^
+      gmail.hashCode ^
+      position.hashCode ^
+      password.hashCode;
   }
 }
