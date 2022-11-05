@@ -20,19 +20,26 @@ class SignCubit extends Cubit<SignState> {
   final StaffCubit staffCubit;
   final HomeCubit homeCubit;
 
-  void signIn(String email, String password) async {
+  Future<bool> signIn(String email, String password) async {
     final spref = await SharedPreferences.getInstance();
     if (email == 'admin@gmail.com' && password == 'admin') {
       await spref.setString('gmail', email);
       emit(AdminSignIned());
-      return;
+      return true;
     }
-    Staff staff = await service.getOneStaffByEmail(email);
+    Staff? staff;
+    try {
+      staff = await service.getOneStaffByEmail(email);
+    } catch (error) {
+      return false;
+    }
     if (staff.gmail == email && staff.password == password) {
       await spref.setString('gmail', staff.gmail);
       emit(SignIned());
       homeCubit.emit(HomeInitial());
+      return true;
     }
+    return false;
   }
 
   Future<void> logOut() async {

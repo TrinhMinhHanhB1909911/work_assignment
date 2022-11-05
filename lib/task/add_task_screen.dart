@@ -56,6 +56,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Widget build(BuildContext context) {
     TaskCubit taskCubit = BlocProvider.of(context);
     return Scaffold(
+      backgroundColor: Colors.blue.shade100,
       appBar: AppBar(
         elevation: 0,
         title: const Text('Thêm lịch công tác'),
@@ -80,9 +81,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   TextFormField(
                     validator: validate,
                     controller: titleController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Tiêu đề',
-                      border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -92,9 +97,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     minLines: 3,
                     maxLines: 3,
                     controller: descriptionController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Mô tả',
-                      border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -104,7 +113,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     controller: beginController,
                     decoration: InputDecoration(
                       labelText: 'Ngày bắt đầu: ',
-                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       suffixIcon: InkWell(
                         onTap: () async {
                           DateTime? date = await showDatePicker(
@@ -136,7 +149,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     controller: endController,
                     decoration: InputDecoration(
                       labelText: 'Ngày kết thúc: ',
-                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       suffixIcon: InkWell(
                         onTap: () async {
                           DateTime? date = await showDatePicker(
@@ -165,9 +182,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   FutureBuilder(
                     future: fetchOptions(),
                     builder: (context, snapshot) => DropDownMultiSelect(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Nhân viên công tác',
-                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
                       options: options.map((staff) => staff.name).toList(),
                       selectedValues:

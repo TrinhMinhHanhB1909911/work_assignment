@@ -43,6 +43,8 @@ dependencies:
   multiselect: ^0.0.7
   shimmer: ^2.0.0
   shared_preferences: ^2.0.15
+  flutter_native_splash: ^2.2.13
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
   flutter_test:
@@ -96,3 +98,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/splash.png
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/launcher.png"
+  min_sdk_android: 21

@@ -35,6 +35,7 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
   Widget build(BuildContext context) {
     final staffCubit = BlocProvider.of<StaffCubit>(context);
     return Scaffold(
+      backgroundColor: Colors.blue.shade100,
       appBar: AppBar(
         elevation: 0,
         title: const Text('Thêm nhân viên'),
@@ -60,9 +61,13 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                   TextFormField(
                     validator: validate,
                     onChanged: (value) => name = value,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.person),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Tên',
                     ),
                   ),
@@ -71,9 +76,13 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                   TextFormField(
                     validator: validate,
                     onChanged: (value) => address = value,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.location_on),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.location_on),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Địa chỉ',
                     ),
                   ),
@@ -81,9 +90,13 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                   TextFormField(
                     validator: validate,
                     onChanged: (value) => position = value,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person_pin_sharp),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.person_pin_sharp),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Vị trí',
                     ),
                   ),
@@ -102,9 +115,13 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                       return null;
                     },
                     onChanged: (value) => gmail = value,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.mail),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.mail),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Gmail',
                     ),
                   ),
@@ -113,9 +130,13 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
                     validator: validate,
                     onChanged: (value) => password = value,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       labelText: 'Mật khẩu',
                     ),
                   ),
