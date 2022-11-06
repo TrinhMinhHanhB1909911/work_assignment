@@ -76,6 +76,8 @@ class _AccountContainerState extends State<AccountContainer> {
                     bool result = await confirm();
                     if (result) {
                       await changeAccountInfo();
+                    } else {
+                      resetController();
                     }
                   }
                   setState(() {
@@ -122,6 +124,15 @@ class _AccountContainerState extends State<AccountContainer> {
     widget.staff.birthYear = int.tryParse(yearController.text);
     widget.staff.gender = genderController.text;
     context.read<HomeCubit>().changeAccountInfo(widget.staff);
+  }
+
+  void resetController() {
+    nameController.text = widget.staff.name;
+    gmailController.text = widget.staff.gmail;
+    addressController.text = widget.staff.address;
+    positionController.text = widget.staff.position;
+    yearController.text = widget.staff.birthYear.toString();
+    genderController.text = widget.staff.gender ?? 'chưa rõ';
   }
 }
 

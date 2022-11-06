@@ -43,19 +43,6 @@ class HomeScreen extends StatelessWidget {
           elevation: 0,
           actions: const [
             LogOutButton()
-            // InkWell(
-            //   onTap: () => BlocProvider.of<SignCubit>(context).logOut(),
-            //   child: const Tooltip(
-            //     message: 'Đăng xuất',
-            //     child: Padding(
-            //       padding: EdgeInsets.symmetric(horizontal: 16),
-            //       child: Icon(
-            //         Icons.logout_rounded,
-            //         color: Colors.white,
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
         body: BlocConsumer<HomeCubit, HomeState>(

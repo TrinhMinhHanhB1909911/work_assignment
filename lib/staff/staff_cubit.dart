@@ -82,6 +82,10 @@ class StaffCubit extends Cubit<StaffState> {
     return result.toString();
   }
 
+  Future<bool> updatePassword(Staff staff, String password) async {
+    return await staffService.updateStaff(staff.copyWith(password: password));
+  }
+
   void dispose() {
     staffs = null;
     emit(StaffInitial());

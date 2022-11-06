@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:work_assignment/admin/new_password_page.dart';
 
 import 'staff.dart';
 
@@ -10,6 +11,7 @@ class StaffDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(staff.name),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -24,6 +26,21 @@ class StaffDetailScreen extends StatelessWidget {
               flex: 3,
               child: SizedBox(),
             ),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => NewPasswordScreen(staff),
+                    ),
+                  );
+                },
+                child: const Text('Cấp mật khẩu mới'),
+              ),
+            ),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),
