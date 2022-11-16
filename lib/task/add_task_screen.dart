@@ -181,26 +181,35 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   const SizedBox(height: 16),
                   FutureBuilder(
                     future: fetchOptions(),
-                    builder: (context, snapshot) => DropDownMultiSelect(
-                      decoration: InputDecoration(
-                        labelText: 'Nhân viên công tác',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                    builder: (context, snapshot) => Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      options: options.map((staff) => staff.name).toList(),
-                      selectedValues:
-                          selected.map((staff) => staff.name).toList(),
-                      onChanged: (values) {
-                        setState(() {
-                          selected.clear();
-                          selected = options
-                              .where((staff) => values.contains(staff.name))
-                              .toList();
-                        });
-                      },
+                      child: DropDownMultiSelect(
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Nhân viên công tác',
+                          // filled: true,
+                          // fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        options: options.map((staff) => staff.name).toList(),
+                        selectedValues: [
+                          ...selected.map((staff) => staff.name).toList()
+                        ],
+                        onChanged: (values) {
+                          setState(() {
+                            selected.clear();
+                            selected = options
+                                .where((staff) => values.contains(staff.name))
+                                .toList();
+                            
+                          });
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -252,13 +261,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Add new task'),
-                              content: const Text(
-                                'Success!',
-                              ),
+                              title: const Text('Trạng thái'),
+                              content: const Text('Thêm thành công!'),
                               actions: [
-                                InkWell(
-                                  onTap: () {
+                                TextButton(
+                                  onPressed: () {
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     BlocProvider.of<TaskCubit>(context)
@@ -267,12 +274,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     BlocProvider.of<TaskCubit>(context)
                                         .allTask();
                                   },
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(
-                                      'ok',
-                                    ),
-                                  ),
+                                  child: const Text('ok'),
                                 ),
                               ],
                             );
