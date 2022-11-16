@@ -93,7 +93,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
         actions: [
           Visibility(
             visible: widget.editable,
-            child: TextButton(
+            child: IconButton(
               onPressed: () async {
                 if (editing) {
                   bool confirm = await showDialog(
@@ -137,14 +137,15 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     taskCubit.updateTask(newTask);
                   } else {
                     titleController.text = origin['title'] as String;
-                    descriptionController.text = origin['description'] as String;
+                    descriptionController.text =
+                        origin['description'] as String;
                     stateController.text = origin['state'] as String;
                     beginController.text = origin['begin'] as String;
                     endController.text = origin['end'] as String;
                     staffController.text = origin['staffsName'] as String;
                     selected = options
-                        .where((staff) =>
-                            (origin['staffsName'] as String).contains(staff.name))
+                        .where((staff) => (origin['staffsName'] as String)
+                            .contains(staff.name))
                         .toList();
                   }
                 }
@@ -152,9 +153,8 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   editing = !editing;
                 });
               },
-              child: Text(
-                editing ? 'Xong' : 'Sửa',
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+              icon: Icon(
+                editing ? Icons.done : Icons.edit,
               ),
             ),
           ),
