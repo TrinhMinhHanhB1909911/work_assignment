@@ -30,6 +30,26 @@ class StaffsPage extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is StaffsLoaded) {
+            if (state.staffs.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.not_interested_rounded,
+                      color: Colors.red.shade300,
+                    ),
+                    Text(
+                      'Chưa có nhân viên',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.red.shade300,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
             return RefreshIndicator(
               onRefresh: context.read<StaffCubit>().refresh,
               child: ListView.builder(

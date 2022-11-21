@@ -9,6 +9,7 @@ class StaffDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade100,
       appBar: AppBar(
         title: Text(staff.name),
         elevation: 0,

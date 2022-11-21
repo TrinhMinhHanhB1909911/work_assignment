@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:work_assignment/services/task_service.dart';
 import '../../models/staff.dart';
@@ -52,9 +55,10 @@ class StaffCubit extends Cubit<StaffState> {
   }
 
   Future<void> addStaff(Staff staff) async {
+    emit(StaffsLoading());
     staff = handleStaffBeforeAdd(staff);
-    await staffService.addStaff(staff);
     staffs ??= await staffService.getAllStaffs();
+    await staffService.addStaff(staff);
     staffs!.add(staff);
     emit(StaffsLoaded(staffs!));
   }
@@ -84,7 +88,13 @@ class StaffCubit extends Cubit<StaffState> {
   }
 
   Future<bool> updatePassword(Staff staff, String password) async {
-    return await staffService.updateStaff(staff.copyWith(password: password));
+    final oldState = state;
+    emit(StaffsLoading());
+    password = md5.convert(utf8.encode(password)).toString();
+    final result =
+        await staffService.updateStaff(staff.copyWith(password: password));
+    emit(oldState);
+    return result;
   }
 
   void dispose() {

@@ -87,6 +87,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget build(BuildContext context) {
     final taskCubit = BlocProvider.of<TaskCubit>(context);
     final focusScope = FocusScope.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     return Scaffold(
       backgroundColor: Colors.blue.shade100,
       appBar: AppBar(
@@ -155,7 +156,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     origin['begin'] = beginController.text;
                     origin['end'] = endController.text;
                     origin['staffsName'] = staffController.text;
-                    taskCubit.updateTask(newTask);
+                    await taskCubit.updateTask(newTask);
+                    const snackBar = SnackBar(content: Text('Lịch công tác đã được cập nhật!'));
+                    scaffoldMessenger..hideCurrentSnackBar()..showSnackBar(snackBar);
                   } else {
                     titleController.text = origin['title'] as String;
                     descriptionController.text =
@@ -181,42 +184,51 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(height: 40.0),
-              buildContentRow('Tiêu đề:', titleController),
-              const SizedBox(height: 60.0),
-              buildContentRow(
-                'Mô tả:',
-                descriptionController,
+      body: BlocBuilder<TaskCubit, TaskState>(
+        builder: (context, state) {
+          if (state is TaskLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(height: 40.0),
+                  buildContentRow('Tiêu đề:', titleController),
+                  const SizedBox(height: 60.0),
+                  buildContentRow(
+                    'Mô tả:',
+                    descriptionController,
+                  ),
+                  const SizedBox(height: 60.0),
+                  buildContentRow(
+                    'Trạng thái:',
+                    stateController,
+                  ),
+                  const SizedBox(height: 60.0),
+                  buildContentRow(
+                    'Bắt đầu:',
+                    beginController,
+                  ),
+                  const SizedBox(height: 60.0),
+                  buildContentRow(
+                    'Kết thúc:',
+                    endController,
+                  ),
+                  const SizedBox(height: 60.0),
+                  buildContentRow(
+                    'Nhân viên công tác:',
+                    staffController,
+                  ),
+                ],
               ),
-              const SizedBox(height: 60.0),
-              buildContentRow(
-                'Trạng thái:',
-                stateController,
-              ),
-              const SizedBox(height: 60.0),
-              buildContentRow(
-                'Bắt đầu:',
-                beginController,
-              ),
-              const SizedBox(height: 60.0),
-              buildContentRow(
-                'Kết thúc:',
-                endController,
-              ),
-              const SizedBox(height: 60.0),
-              buildContentRow(
-                'Nhân viên công tác:',
-                staffController,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

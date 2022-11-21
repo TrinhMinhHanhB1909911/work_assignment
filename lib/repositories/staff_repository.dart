@@ -1,6 +1,7 @@
-
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 
 import 'repository_interface.dart';
 import '../models/staff.dart';
@@ -11,8 +12,13 @@ class StaffRepository implements Repository<Staff> {
   @override
   Future<Staff> create(Staff item) async {
     final snapshot = await collection.orderBy('id').limitToLast(1).get();
-    item.id = (snapshot.docs.isNotEmpty ? snapshot.docs.first.data()['id'] as int : 0) + 1;
-    await collection.add(item.toJson());
+    item.id = (snapshot.docs.isNotEmpty
+            ? snapshot.docs.first.data()['id'] as int
+            : 0) +
+        1;
+    final json = item.toJson();
+    json['password'] = md5.convert(utf8.encode(json['password'])).toString();
+    await collection.add(json);
     return item;
   }
 

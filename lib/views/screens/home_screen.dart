@@ -41,9 +41,7 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           elevation: 0,
-          actions: const [
-            LogOutButton()
-          ],
+          actions: const [LogOutButton()],
         ),
         body: BlocConsumer<HomeCubit, HomeState>(
           listener: (context, state) {
@@ -68,11 +66,18 @@ class HomeScreen extends StatelessWidget {
                 return RefreshIndicator(
                   onRefresh: () => context.read<HomeCubit>().refresh(),
                   child: ListView(
-                    children: const [
-                      SizedBox(height: 300),
+                    children: [
+                      const SizedBox(height: 300),
+                      Icon(
+                        Icons.not_interested_rounded,
+                        color: Colors.red.shade300,
+                      ),
                       Text(
                         'Bạn chưa có lịch công tác',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red.shade300,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ],

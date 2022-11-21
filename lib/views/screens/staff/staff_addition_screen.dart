@@ -41,157 +41,167 @@ class _AddStaffScreenState extends State<AddStaffScreen> {
         elevation: 0,
         title: const Text('Thêm nhân viên'),
       ),
-      body: Center(
-        child: Form(
-          key: _key,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // const SizedBox(height: 32),
-                  const Text(
-                    'Thêm nhân viên',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  TextFormField(
-                    validator: validate,
-                    onChanged: (value) => name = value,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.person),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+      body: BlocBuilder<StaffCubit, StaffState>(
+        builder: (context, state) {
+          if (state is StaffsLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Center(
+            child: Form(
+              key: _key,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // const SizedBox(height: 32),
+                      const Text(
+                        'Thêm nhân viên',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      labelText: 'Tên',
-                    ),
-                  ),
+                      const SizedBox(height: 32),
+                      TextFormField(
+                        validator: validate,
+                        onChanged: (value) => name = value,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.person),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          labelText: 'Tên',
+                        ),
+                      ),
 
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    validator: validate,
-                    onChanged: (value) => address = value,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.location_on),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        validator: validate,
+                        onChanged: (value) => address = value,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.location_on),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          labelText: 'Địa chỉ',
+                        ),
                       ),
-                      labelText: 'Địa chỉ',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    validator: validate,
-                    onChanged: (value) => position = value,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.person_pin_sharp),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        validator: validate,
+                        onChanged: (value) => position = value,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.person_pin_sharp),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          labelText: 'Vị trí',
+                        ),
                       ),
-                      labelText: 'Vị trí',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Không bỏ trống';
-                      }
-                      bool emailValid = RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(value);
-                      if (!emailValid) {
-                        return 'Gmail không hợp lệ';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) => gmail = value,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.mail),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Không bỏ trống';
+                          }
+                          bool emailValid = RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value);
+                          if (!emailValid) {
+                            return 'Gmail không hợp lệ';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => gmail = value,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.mail),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          labelText: 'Gmail',
+                        ),
                       ),
-                      labelText: 'Gmail',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    validator: validate,
-                    onChanged: (value) => password = value,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        validator: validate,
+                        onChanged: (value) => password = value,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          labelText: 'Mật khẩu',
+                        ),
                       ),
-                      labelText: 'Mật khẩu',
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        focusScope.unfocus();
-                        bool isValid = _key.currentState?.validate() ?? false;
-                        if (isValid) {
-                          staffCubit.addStaff(
-                            Staff(
-                              name: name,
-                              address: address,
-                              gmail: gmail,
-                              position: position,
-                              password: password,
-                            ),
-                          );
-                          await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Trạng thái'),
-                                content:
-                                    const Text('Đã thêm một nhân viên mới'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      BlocProvider.of<StaffCubit>(context)
-                                          .allStaffs();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Ok'),
-                                  ),
-                                ],
+                      const SizedBox(height: 32),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            focusScope.unfocus();
+                            bool isValid =
+                                _key.currentState?.validate() ?? false;
+                            if (isValid) {
+                              await staffCubit.addStaff(
+                                Staff(
+                                  name: name,
+                                  address: address,
+                                  gmail: gmail,
+                                  position: position,
+                                  password: password,
+                                ),
                               );
-                            },
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'Thêm',
-                        style: TextStyle(fontSize: 18),
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Trạng thái'),
+                                    content:
+                                        const Text('Đã thêm một nhân viên mới'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          BlocProvider.of<StaffCubit>(context)
+                                              .allStaffs();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          child: const Text(
+                            'Thêm',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

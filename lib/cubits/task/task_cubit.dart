@@ -33,11 +33,11 @@ class TaskCubit extends Cubit<TaskState> {
     emit(TaskLoaded(tasks!));
   }
 
-  void addTask(Task task) async {
+  Future<void> addTask(Task task) async {
+    emit(TaskLoading());
     task = handleTaskBeforeAdd(task);
-    final newTask = await service.addTask(task);
     tasks ??= await service.getAllTasks();
-    tasks!.add(newTask);
+    await service.addTask(task);
     emit(TaskLoaded(tasks!));
   }
 
@@ -51,6 +51,7 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   Future<void> updateTask(Task task) async {
+    emit(TaskLoading());
     await service.updateTask(task);
     tasks?.removeWhere((element) => element.id == task.id);
     tasks?.add(task);

@@ -50,6 +50,11 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<void> reFreshInfo() async {
+    staff = null;
+    accountTab();
+  }
+
   void taskDetail(Task task) {
     emit(HomeTaskDetail(task));
     emit(HomeLoaded(tasks!));
@@ -84,6 +89,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> changeAccountInfo(Staff staff) async {
+    emit(HomeLoading());
     await staffService.updateStaff(staff);
     final spref = await SharedPreferences.getInstance();
     await spref.remove('gmail');
@@ -103,5 +109,6 @@ class HomeCubit extends Cubit<HomeState> {
       task.staffs.add(staff);
       await taskService.updateTask(task);
     }
+    emit(HomeAccount(staff));
   }
 }

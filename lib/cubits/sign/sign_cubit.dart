@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_assignment/cubits/home/home_cubit.dart';
@@ -33,6 +36,7 @@ class SignCubit extends Cubit<SignState> {
     } catch (error) {
       return false;
     }
+    password = md5.convert(utf8.encode(password)).toString();
     if (staff.gmail == email && staff.password == password) {
       await spref.setString('gmail', staff.gmail);
       emit(SignIned());
@@ -49,5 +53,6 @@ class SignCubit extends Cubit<SignState> {
     final spref = await SharedPreferences.getInstance();
     await spref.remove('gmail');
     emit(LogOut());
+    emit(SignInitial());
   }
 }
