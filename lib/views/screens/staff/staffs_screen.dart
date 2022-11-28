@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:work_assignment/views/widgets/log_out_button.dart';
 
+import '../../widgets/search_staff_screen.dart';
 import 'staff_addition_screen.dart';
 import '../../../cubits/staff/staff_cubit.dart';
 import 'staff_detail_screen.dart';
@@ -12,12 +13,25 @@ class StaffsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final staffCubit = context.read<StaffCubit>();
     return Scaffold(
       backgroundColor: Colors.blue.shade100,
       appBar: AppBar(
         elevation: 0,
         title: const Text('Nhân viên'),
-        actions: const [LogOutButton()],
+        actions: [
+          IconButton(
+            onPressed: () {
+              final staffs = staffCubit.staffs ?? [];
+              showSearch(
+                context: context,
+                delegate: SearchStaffScreen(staffs),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+          const LogOutButton(),
+        ],
       ),
       body: BlocConsumer<StaffCubit, StaffState>(
         listener: (context, state) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:work_assignment/views/widgets/log_out_button.dart';
 import 'package:work_assignment/views/screens/task/task_detail_screen.dart';
+import 'package:work_assignment/views/widgets/searching.dart';
 
 import 'task_addition_screen.dart';
 import '../../../cubits/task/task_cubit.dart';
@@ -12,13 +13,25 @@ class ListTaskPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeCubit = context.read<TaskCubit>();
     return Scaffold(
       backgroundColor: Colors.blue.shade100,
       appBar: AppBar(
         elevation: 0,
         title: const Text('Lịch công tác'),
-        actions: const [
-          LogOutButton(),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final tasks = homeCubit.tasks ?? [];
+              showSearch(
+                context: context,
+                delegate:
+                    SearchScreen(tasks),
+              );
+            },
+            icon: const Icon(Icons.search),
+          ),
+          const LogOutButton(),
         ],
       ),
       body: BlocConsumer<TaskCubit, TaskState>(
@@ -36,7 +49,10 @@ class ListTaskPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.not_interested_rounded, color: Colors.red.shade300,),
+                    Icon(
+                      Icons.not_interested_rounded,
+                      color: Colors.red.shade300,
+                    ),
                     Text(
                       'Chưa có lịch công tác',
                       style: TextStyle(
